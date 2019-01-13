@@ -1,8 +1,12 @@
-language: python
+sudo: required
+dist: trusty
+python: '3.6'
 
 services:
   - docker
 
 before_install:
-  - docker pull jredies/docker-python-conda-quantlib
-  - docker build .
+  - docker pull jredies/docker-python-conda-quantlib:latest || true
+script:
+  - python setup.py bdist_wheel
+  - docker build --pull --cache-from jredies/docker-python-conda-quantlib:latest --tag jredies/docker-python-conda-quantlib .
